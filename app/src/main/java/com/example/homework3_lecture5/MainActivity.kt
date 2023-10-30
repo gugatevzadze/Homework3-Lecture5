@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.homework3_lecture5.databinding.ActivityMainBinding
 import android.util.Patterns
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //layout components
         val emailEdit = binding.emailEdit
         val phoneEdit = binding.phoneEdit
         val usernameEdit = binding.usernameEdit
@@ -23,8 +25,19 @@ class MainActivity : AppCompatActivity() {
         val ageEdit = binding.ageEdit
         val saveButton = binding.saveButton
         val clearButton = binding.clearButton
-        val inputArray =
-            arrayOf(emailEdit, phoneEdit, usernameEdit, firstNameEdit, lastNameEdit, ageEdit)
+        val inputArray = arrayOf(emailEdit, phoneEdit, usernameEdit, firstNameEdit, lastNameEdit, ageEdit)
+        //bonus task variables
+        val emailOutput = binding.emailOutput
+        val phoneOutput = binding.phoneOutput
+        val usernameOutput = binding.usernameOutput
+        val fullNameOutput = binding.fullNameOutput
+        val ageOutput = binding.ageOutput
+        val againButton = binding.againButton
+        //bonus task layout components
+        val linearUpper = binding.linearUpper
+        val linearLower = binding.linearLower
+        val linearUpperAfter = binding.linearUpperAfter
+        val linearLowerAfter = binding.linearLowerAfter
 
         //function to iterate through inputs to check whether a field is empty
         fun filledInputs(): Boolean {
@@ -48,12 +61,12 @@ class MainActivity : AppCompatActivity() {
             return false
         }
         //added phone input, just thought would look more complete
-        //in xml i wrote for it to only accept number input but I still wrote code to trim the string
+        //in xml i wrote for it to only accept number input but I still wrote code to trim the string and
         //if statement checks whether the string starts with 5 (standard Georgian Number) and contains 9 digits
+        // (i did not implement +995 internation code, as some apps in Georgia dont ask for them)
         fun phoneValidation(inputtedPhone:String): Boolean {
             val numberToString = inputtedPhone.trim()
             return if (numberToString.startsWith('5') && numberToString.length == 9){//es chasasworebelia
-//                numberToString
                 true
             }else{
                 Toast.makeText(this, "გთხოვთ შეიყვანოთ ნომერი სწორი ფორმატით [5** *** ***]", Toast.LENGTH_SHORT).show().toString()
@@ -64,7 +77,6 @@ class MainActivity : AppCompatActivity() {
         //and doesn't contain " " so that an empty string is not registered as input
         fun usernameValidation(inputtedUsername:String): Boolean {
             return if(inputtedUsername.length > 10 && !inputtedUsername.contains(" ")) {
-//                inputtedUsername
                 true
             }else{
                 Toast.makeText(this, "გთხოვთ შეიყვანოთ 10 სიმბოლოზე მეტი", Toast.LENGTH_SHORT).show().toString()
@@ -74,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         //same goes here, but the number of characters doesn't matter
         fun nameBinder(inputtedFirstName:String, inputtedLastName:String): Boolean {
             return if(!inputtedFirstName.contains(" ") && !inputtedLastName.contains(" ")) {
-//                "$inputtedFirstName $inputtedLastName"
                 true
             }else{
                 Toast.makeText(this, "გთხოვთ შეიყვანოთ სახელი ან/და გვარი სწორი ფორმატით", Toast.LENGTH_SHORT).show().toString()
@@ -83,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         }
         //I restricted the usage of letters or symbols from xml so they are unlikely to enter
         //but i still wrote the exception handling
-        //without the outer if else try catch still allowed "negative" numbers (with "-") sign
+        //without the outer if else try-catch still allowed "negative" numbers (with "-") sign
         //so I had to improvise
         fun ageValidation(inputtedAge:String): Boolean {
             if(!inputtedAge.contains(".") && !inputtedAge.contains("-")){
@@ -117,8 +128,33 @@ class MainActivity : AppCompatActivity() {
                 usernameValidation(usernameEdit.text.toString()) &&
                 nameBinder(firstNameEdit.text.toString(), lastNameEdit.text.toString()) &&
                 ageValidation(ageEdit.text.toString())){
-                Toast.makeText(this, "მონაცემები წარმატებით შეინახა", Toast.LENGTH_SHORT).show().toString()
+
+                //bonus task - save button also triggers the change of visibility property for linearLayout Upper and linearLayout Lower
+                linearUpper.visibility = View.GONE
+                linearLower.visibility = View.GONE
+                linearUpperAfter.visibility = View.VISIBLE
+                linearLowerAfter.visibility = View.VISIBLE
+
+                emailOutput.text = emailEdit.text.toString()
+                phoneOutput.text = phoneEdit.text.toString()
+                usernameOutput.text = usernameEdit.text.toString()
+                fullNameOutput.text = "${firstNameEdit.text.toString()} ${lastNameEdit.text.toString()}"
+                ageOutput.text = ageEdit.text.toString()
             }
+        }
+        //bonus task - button restarts the visibility and sets the variables back to empty strings
+        againButton.setOnClickListener {
+            emailEdit.setText("")
+            phoneEdit.setText("")
+            usernameEdit.setText("")
+            firstNameEdit.setText("")
+            lastNameEdit.setText("")
+            ageEdit.setText("")
+
+            linearUpper.visibility = View.VISIBLE
+            linearLower.visibility = View.VISIBLE
+            linearUpperAfter.visibility = View.GONE
+            linearLowerAfter.visibility = View.GONE
         }
     }
 }

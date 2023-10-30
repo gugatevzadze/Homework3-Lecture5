@@ -15,4 +15,5 @@
     <string name="your_name">Your Name</string>
     <string name="your_last_name">Your Last Name</string>
     <string name="your_age">Your Age</string>
+    <string name="again">Again</string>
 </resources>
